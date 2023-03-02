@@ -1,0 +1,5 @@
+name: Lazy-Load Video iFrame
+type: module
+description: Lazy-loades remote videos and rewrites to use cookie-less urls
+package: Custom
+core_version_requirement: ^8 || ^9 || ^10

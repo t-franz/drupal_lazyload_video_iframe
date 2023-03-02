@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Lazy-Load Video iFrame module.
+ * https://www.lukeleber.com/blog/2020-12-23-drupal-8-oembed-how-lazy-load-stuff
+ */
+
+/**
+ * Implements hook_preprocess().
+ */
+function custom_lazyload_video_iframe_preprocess_media_oembed_iframe(&$variables) {
+  //dpm($variables);
+  // https://www.drupal.org/project/drupal/issues/3043821
+
+  // Rewrite to use cookie-less urls
+  if (strpos((string) $variables['media'], 'youtube.com') !== FALSE) {
+    $variables['media'] = str_replace('youtube.com/', 'youtube-nocookie.com/', $variables['media']);
+  }
+  if (strpos((string) $variables['media'], 'youtu.be') !== FALSE) {
+    $variables['media'] = str_replace('youtu.be/', 'www.youtube-nocookie.com/embed/', $variables['media']);
+  }
+  if (strpos((string) $variables['media'], 'vimeo') !== FALSE) {
+    $variables['media'] = preg_replace('/src="([^"]*)"/', 'src="$1?dnt=1"', $variables['media']);
+  }
+
+  // Add lazy-attribute
+  $variables['media'] = str_replace('src=', 'loading="lazy" src=', $variables['media']);
+
+}
+
